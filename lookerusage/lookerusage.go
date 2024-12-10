@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://opensource.org/licenses/MIT
  */
 
- // Package lookerusage provides the implementation for the looker-usage command.
+// Package lookerusage provides the implementation for the looker-usage command.
 package lookerusage
 
 import (
@@ -14,9 +14,10 @@ import (
 	"fmt"
 	"strings"
 
-	"google3/base/go/log"
-	"google3/third_party/looker_o2c_cli/looker_usage/types"
-	"google3/third_party/looker_sdk_codegen/go/sdk/v4/v4"
+	"github.com/looker-open-source/looker_o2c_migration_evaluation/types"
+	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
+
+	log "github.com/golang/glog"
 )
 
 // LookerUsage is the struct for the looker usage in the output csv file.

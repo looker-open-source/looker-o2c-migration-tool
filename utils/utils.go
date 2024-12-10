@@ -13,10 +13,11 @@ import (
 	"fmt"
 	"os"
 
-	"google3/base/go/log"
-	"google3/third_party/looker_o2c_cli/looker_usage/lookerusage"
-	"google3/third_party/looker_sdk_codegen/go/rtl/rtl"
-	"google3/third_party/looker_sdk_codegen/go/sdk/v4/v4"
+	"github.com/looker-open-source/looker_o2c_migration_evaluation/lookerusage"
+
+	log "github.com/golang/glog"
+	"github.com/looker-open-source/sdk-codegen/go/rtl"
+	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
 )
 
 // InitSession initializes the looker sdk session.

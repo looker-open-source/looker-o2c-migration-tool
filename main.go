@@ -10,10 +10,10 @@
 package main
 
 import (
-	"google3/base/go/flag"
-	"google3/base/go/google"
-	"google3/third_party/looker_o2c_cli/looker_usage/lookerusage"
-	"google3/third_party/looker_o2c_cli/looker_usage/utils"
+	"github.com/looker-open-source/looker_o2c_migration_evaluation/lookerusage"
+	"github.com/looker-open-source/looker_o2c_migration_evaluation/utils"
+
+	"flag"
 )
 
 var (
@@ -28,7 +28,7 @@ var (
 func main() {
 	// Initialize Google libraries.
 	flag.Set("alsologtostderr", "true")
-	google.Init()
+	flag.Parse()
 	lookersdk := utils.InitSession(*apiIDKey, *apiSecretKey, *lookerLocation, *ssl)
 	lu := lookerusage.LookerUsage{}
 

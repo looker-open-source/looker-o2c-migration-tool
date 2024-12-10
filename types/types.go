@@ -9,8 +9,6 @@
 // Package types contains the types used by the other commands.
 package types
 
-import ()
-
 // Project is the struct for the project in the output csv file.
 type Project struct {
 	ProjectName     string `csv:"Project Name"`
