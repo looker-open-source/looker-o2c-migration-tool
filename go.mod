@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/golang/glog v1.2.3
-	github.com/looker-open-source/sdk-codegen/go v0.0.3-0.20241202185240-d88021950929
+	github.com/looker-open-source/sdk-codegen/go v0.0.0-20241202185240-d88021950929
 )
 
 require (
