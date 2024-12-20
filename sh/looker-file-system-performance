@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# @license
+# Copyright Google LLC All Rights Reserved.
+# Use of this source code is governed by an MIT-style license that can be
+# found in the LICENSE file at https://opensource.org/licenses/MIT
+
+# Execute the following shell script on the your instance and share the result. This script shows the size and file count of individual model-related directories, along with a disk write speed test:
+
+# Assuming looker as the username and that the installation took place on the
+# user's home directory like we describe on our documentation.
+
+ROOT_LOOKER_FS_DIRECTORY=$(getent passwd looker | cut -d: -f 6)
+pushd ${ROOT_LOOKER_FS_DIRECTORY:-./looker};
+echo ""Measuring size and file counts for looker model directories in $(pwd)...""
+
+for d in . bare_models models models/* models-user-looker marketplace remote_dependencies ; do
+  if [ -e $d ]; then
+    echo bytes $(du -s --bytes ""$d"")
+    echo files $(find ""$d"" -type f -ls | wc -l) $d
+  fi
+done
+pwd
+find . -type d -name 'model-user-*' -exec du -s --bytes {} \;
+echo ""Timing disk writes. Wait for a few seconds...""
+(time dd if=/dev/zero of=./tmp_zero.bin bs=512 count=1000 oflag=dsync) 2>&1
+(time dd if=/dev/zero of=./tmp_zero.bin bs=1G count=1 oflag=dsync) 2>&1
+rm -f ./tmp_zero.bin
+echo ""Done""
+popd

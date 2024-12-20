@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright 2024 Google LLC.
+ * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://opensource.org/licenses/MIT
  */
 
- // Package lookerusage provides the implementation for the looker-usage command.
+// Package lookerusage provides the implementation for the looker-usage command.
 package lookerusage
 
 import (
@@ -14,9 +14,8 @@ import (
 	"fmt"
 	"strings"
 
-	"google3/base/go/log"
-	"google3/third_party/looker_o2c_cli/looker_usage/types"
-	"google3/third_party/looker_sdk_codegen/go/sdk/v4/v4"
+	"google3/base/(internal)"
+	"google3/third_party/looker_sdk_codegen/(internal)"
 )
 
 // LookerUsage is the struct for the looker usage in the output csv file.
@@ -25,10 +24,28 @@ type LookerUsage struct {
 	Users             []v4.User          `csv:"USER INFO"`
 	Dashboards        []v4.DashboardBase `csv:"DASHBOARD INFO"`
 	Schedules         []v4.ScheduledPlan `csv:"SCHEDULE INFO"`
-	Queries           types.QueryStats   `csv:"QUERY INFO"`
+	Queries           QueryStats         `csv:"QUERY INFO"`
 	LegacyFeatures    []v4.LegacyFeature `csv:"LEGACY FEATURES"`
 	Settings          v4.Setting         `csv:"SETTINGS"`
 	ConnectionDetails []v4.DBConnection  `csv:"CONNECTION DETAILS"`
+}
+
+// QueryResult is the struct for the query stats in the Looker system activity model inline query results.
+type QueryResult struct {
+	HistoryCreatedHour   string `json:"history.created_hour"`
+	HistoryQueryRunCount int    `json:"history.query_run_count"`
+}
+
+// QueryStats is the struct for the queries in the output csv file.
+type QueryStats struct {
+	QueryCount int `csv:"Query Count"`
+	QueryMax   int `csv:"Max Queries in an Hour"`
+}
+
+// KeyValue struct is used to facilitate generic data handling for flushing to csv.
+type KeyValue struct {
+	Key   string `csv:"Key"`
+	Value int    `csv:"Value"`
 }
 
 // ComputeUsage gets the usage for the looker instance.
@@ -54,10 +71,10 @@ func (lu *LookerUsage) ComputeUsage(lookersdk *v4.LookerSDK) {
 
 func (lu *LookerUsage) String() string {
 	buf := new(strings.Builder)
-	buf.WriteString(composeString("PROJECT INFO", types.KeyValue{Key: "Total Projects", Value: len(lu.Projects)}))
-	buf.WriteString(composeString("USER INFO", types.KeyValue{Key: "Total Users", Value: len(lu.Users)}))
-	buf.WriteString(composeString("DASHBOARD INFO", types.KeyValue{Key: "Total Dashboards", Value: len(lu.Dashboards)}))
-	buf.WriteString(composeString("SCHEDULE INFO", types.KeyValue{Key: "Total Schedules", Value: len(lu.Schedules)}))
+	buf.WriteString(composeString("PROJECT INFO", KeyValue{Key: "Total Projects", Value: len(lu.Projects)}))
+	buf.WriteString(composeString("USER INFO", KeyValue{Key: "Total Users", Value: len(lu.Users)}))
+	buf.WriteString(composeString("DASHBOARD INFO", KeyValue{Key: "Total Dashboards", Value: len(lu.Dashboards)}))
+	buf.WriteString(composeString("SCHEDULE INFO", KeyValue{Key: "Total Schedules", Value: len(lu.Schedules)}))
 	buf.WriteString(composeString("QUERY INFO", lu.Queries))
 	buf.WriteString(composeString("LEGACY FEATURES", lu.LegacyFeatures))
 	buf.WriteString(composeString("FEATURE FLAGS", *lu.Settings.InstanceConfig.FeatureFlags))
@@ -123,14 +140,14 @@ func (lu *LookerUsage) fetchQueryDetails(lookersdk *v4.LookerSDK) {
 	}
 	queryCount, queryMax, _ := queryCounts(result)
 
-	lu.Queries = types.QueryStats{
+	lu.Queries = QueryStats{
 		QueryCount: queryCount,
 		QueryMax:   queryMax,
 	}
 }
 
 func queryCounts(result string) (int, int, error) {
-	var res []types.QueryResult
+	var res []QueryResult
 	err := json.Unmarshal([]byte(result), &res)
 	if err != nil {
 		return 0, 0, err
@@ -185,11 +202,11 @@ func composeString(header string, data any) string {
 				log.Errorf("Failed to create csv string: %v", err)
 			}
 		}
-	case types.KeyValue:
+	case KeyValue:
 		if _, err := buf.WriteString(fmt.Sprintf("%s,%d\n", v.Key, v.Value)); err != nil {
 			log.Errorf("Failed to create csv string: %v", err)
 		}
-	case types.QueryStats:
+	case QueryStats:
 		if _, err := buf.WriteString("Last Month Total Queries," + fmt.Sprintf("%d", v.QueryCount) + "\n"); err != nil {
 			log.Errorf("Failed to create csv string: %v", err)
 		}
