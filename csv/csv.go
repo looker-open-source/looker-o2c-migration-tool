@@ -12,7 +12,7 @@ package csv
 import (
 	"os"
 
-	"google3/base/(internal)"
+	log "github.com/golang/glog"
 )
 
 // WriteDataToCSV writes the looker usage data to a csv file.

@@ -14,8 +14,8 @@ import (
 	"fmt"
 	"strings"
 
-	"google3/base/(internal)"
-	"google3/third_party/looker_sdk_codegen/(internal)"
+	log "github.com/golang/glog"
+	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
 )
 
 // LookerUsage is the struct for the looker usage in the output csv file.

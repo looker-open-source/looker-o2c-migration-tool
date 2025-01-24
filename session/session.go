@@ -10,8 +10,8 @@
 package session
 
 import (
-	"google3/third_party/looker_sdk_codegen/(internal)"
-	"google3/third_party/looker_sdk_codegen/(internal)"
+	"google3/third_party/looker_sdk_codegen/go/rtl/rtl"
+	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
 )
 
 // InitSession initializes the looker sdk session.

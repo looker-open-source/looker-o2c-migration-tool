@@ -10,14 +10,15 @@
 package main
 
 import (
-	"fmt"
 	"os/exec"
 
-	"google3/base/(internal)"
-	"google3/base/(internal)"
-	"google3/third_party/looker_o2c_cli/csv"
-	"google3/third_party/looker_o2c_cli/lookerusage"
-	"google3/third_party/looker_o2c_cli/session"
+	log "github.com/golang/glog"
+
+	"flag"
+	
+	"github.com/looker-open-source/looker_o2c_migration_evaluation/csv"
+	"github.com/looker-open-source/looker_o2c_migration_evaluation/lookerusage"
+	"github.com/looker-open-source/looker_o2c_migration_evaluation/session"
 )
 
 var (
@@ -37,7 +38,7 @@ const fileSystemPerformanceCommand = "file-system-performance"
 func main() {
 	// Initialize Google libraries.
 	flag.Set("alsologtostderr", "true")
-	google.Init()
+	flag.Parse()
 
 	switch *command {
 	case computeUsageCommand:
@@ -54,6 +55,6 @@ func main() {
 		csv.WriteDataToCSV(*outputCSVPath, string(output))
 
 	default:
-		fmt.Println("Invalid command")
+		log.Infof("Invalid command")
 	}
 }
