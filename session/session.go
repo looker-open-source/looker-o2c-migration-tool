@@ -10,7 +10,7 @@
 package session
 
 import (
-	"google3/third_party/looker_sdk_codegen/go/rtl/rtl"
+	"github.com/looker-open-source/sdk-codegen/go/rtl"
 	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
 )
 
