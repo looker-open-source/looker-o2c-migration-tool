@@ -10,6 +10,7 @@
 package csv
 
 import (
+	"fmt"
 	"os"
 
 	log "github.com/golang/glog"
@@ -29,4 +30,5 @@ func WriteDataToCSV(path string, usage string) {
 	defer outputCSV.Close()
 
 	log.Infof("WRITING TO CSV FILE")
+	fmt.Fprintln(outputCSV, usage)
 }

@@ -12,10 +12,9 @@ package main
 import (
 	"os/exec"
 
-	log "github.com/golang/glog"
-
 	"flag"
 	
+	log "github.com/golang/glog"
 	"github.com/looker-open-source/looker_o2c_migration_evaluation/csv"
 	"github.com/looker-open-source/looker_o2c_migration_evaluation/lookerusage"
 	"github.com/looker-open-source/looker_o2c_migration_evaluation/session"
@@ -49,9 +48,10 @@ func main() {
 		csv.WriteDataToCSV(*outputCSVPath, lu.String())
 
 	case fileSystemPerformanceCommand:
-		cmd := exec.Command("./looker-file-system-performance")
-		output, _ := cmd.Output()
+		cmd := exec.Command("./sh/looker-file-system-performance")
 
+		output, _ := cmd.Output()
+		log.Infof("Output: %s\n", output)
 		csv.WriteDataToCSV(*outputCSVPath, string(output))
 
 	default:
