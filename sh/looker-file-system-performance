@@ -10,21 +10,25 @@
 # Assuming looker as the username and that the installation took place on the
 # user's home directory like we describe on our documentation.
 
-ROOT_LOOKER_FS_DIRECTORY=$(getent passwd looker | cut -d: -f 6)
+ROOT_LOOKER_FS_DIRECTORY=$1
+if [ -z "$ROOT_LOOKER_FS_DIRECTORY" ]; then
+  ROOT_LOOKER_FS_DIRECTORY=$(getent passwd looker | cut -d: -f 6)
+fi
+
 pushd ${ROOT_LOOKER_FS_DIRECTORY:-./looker};
-echo ""Measuring size and file counts for looker model directories in $(pwd)...""
+echo "Measuring size and file counts for looker model directories in $(pwd)..."
 
 for d in . bare_models models models/* models-user-looker marketplace remote_dependencies ; do
   if [ -e $d ]; then
-    echo bytes $(du -s --bytes ""$d"")
-    echo files $(find ""$d"" -type f -ls | wc -l) $d
+    echo bytes $(du -s --bytes "$d")
+    echo files $(find "$d" -type f -ls | wc -l) $d
   fi
 done
 pwd
 find . -type d -name 'model-user-*' -exec du -s --bytes {} \;
-echo ""Timing disk writes. Wait for a few seconds...""
+echo "Timing disk writes. Wait for a few seconds..."
 (time dd if=/dev/zero of=./tmp_zero.bin bs=512 count=1000 oflag=dsync) 2>&1
 (time dd if=/dev/zero of=./tmp_zero.bin bs=1G count=1 oflag=dsync) 2>&1
 rm -f ./tmp_zero.bin
-echo ""Done""
+echo "Done"
 popd

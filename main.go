@@ -28,6 +28,7 @@ var (
 	lookerLocation = flag.String("addr", "", "Looker instance address, with 'http(s)://' prefix")
 	ssl            = flag.Bool("ssl", true, "Should the connection use SSL")
 	outputCSVPath  = flag.String("output-csv", "", "Path to output csv file")
+	lookerHome     = flag.String("looker-home", "", "Path to the Looker home directory")
 )
 
 // Defined for commands.
@@ -48,7 +49,7 @@ func main() {
 		csv.WriteDataToCSV(*outputCSVPath, lu.String())
 
 	case fileSystemPerformanceCommand:
-		cmd := exec.Command("./sh/looker-file-system-performance")
+		cmd := exec.Command("./sh/looker-file-system-performance", *lookerHome)
 
 		output, _ := cmd.Output()
 		log.Infof("Output: %s\n", output)
