@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # @license
 # Copyright Google LLC All Rights Reserved.
@@ -15,13 +15,13 @@ if [ -z "$ROOT_LOOKER_FS_DIRECTORY" ]; then
   ROOT_LOOKER_FS_DIRECTORY=$(getent passwd looker | cut -d: -f 6)
 fi
 
-pushd ${ROOT_LOOKER_FS_DIRECTORY:-./looker};
+pushd -- "${ROOT_LOOKER_FS_DIRECTORY:-./looker}" > /dev/null
 echo "Measuring size and file counts for looker model directories in $(pwd)..."
 
 for d in . bare_models models models/* models-user-looker marketplace remote_dependencies ; do
-  if [ -e $d ]; then
+  if [ -e "$d" ]; then
     echo bytes $(du -s --bytes "$d")
-    echo files $(find "$d" -type f -ls | wc -l) $d
+    echo files $(find "$d" -type f -ls | wc -l) "$d"
   fi
 done
 pwd
@@ -31,4 +31,4 @@ echo "Timing disk writes. Wait for a few seconds..."
 (time dd if=/dev/zero of=./tmp_zero.bin bs=1G count=1 oflag=dsync) 2>&1
 rm -f ./tmp_zero.bin
 echo "Done"
-popd
+popd > /dev/null
