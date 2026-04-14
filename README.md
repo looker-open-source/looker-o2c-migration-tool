@@ -27,8 +27,12 @@ user's home directory like we describe on our documentation https://cloud.google
 To use the script, you can run the following command:
 
 ```
-go run main.go --command=file-system-performance --output-csv=<output_csv_path>
+go run main.go --command=file-system-performance --output-csv=<output_csv_path> --looker-home=<looker_home_path>
 ```
+
+If `--looker-home` is not provided, the script assumes `looker` as the username and that the installation took place on the
+user's home directory like we describe on our documentation https://cloud.google.com/looker/docs/installing-looker-application.
+Otherwise it will use the path provided.
 
 It will automatically output a CSV file with the file system performance of the Looker
 instance.
